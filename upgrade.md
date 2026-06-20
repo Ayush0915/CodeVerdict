@@ -6,6 +6,7 @@
 
 Do not touch: the overall layout, the dark console panel's visual treatment, the pill-tab filter mechanics, the stats sidebar placement, the severity color system, or anything not explicitly listed below. This is a scoped, surgical pass.
 
+
 ---
 
 ## Fix 1 — Sidebar navigation items don't match real features

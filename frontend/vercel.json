@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "name": "codesentry-frontend",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "env": {
+    "VITE_API_URL": "@codesentry_api_url"
+  }
+}

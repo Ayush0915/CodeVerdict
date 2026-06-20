@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+/* ── Reuse the same CodeFixBlock from FinalReviewPanel ── */
 const CodeFixBlock = ({ code }) => {
   const [copied, setCopied] = useState(false);
 
@@ -9,35 +10,58 @@ const CodeFixBlock = ({ code }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      console.error('Failed to copy:', err);
     }
   };
 
   return (
-    <div className="code-fix-block">
-      <div className="code-fix-header">
-        <span className="code-fix-lang">proposed fix</span>
-        <button type="button" className="code-copy-btn" onClick={handleCopy}>
+    <div className="cfb-root">
+      <div className="cfb-header">
+        <div className="cfb-header-left">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+          </svg>
+          <span>PROPOSED FIX</span>
+        </div>
+        <button type="button" className="cfb-copy-btn" onClick={handleCopy}>
           {copied ? (
-            <span style={{ color: 'var(--accent-success)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span className="cfb-copied">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
               Copied!
             </span>
           ) : (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span className="cfb-copy-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
               Copy
             </span>
           )}
         </button>
       </div>
-      <pre className="code-block">
-        <code>{code}</code>
-      </pre>
+      <pre className="cfb-code"><code>{code}</code></pre>
     </div>
   );
 };
 
+/* ── Severity map matching FinalReviewPanel ── */
+const SEV_CLS = {
+  critical: 'rp-sev rp-sev--critical',
+  warning:  'rp-sev rp-sev--warning',
+  info:     'rp-sev rp-sev--info',
+};
+
+const calcConfidence = (finding) => {
+  if (finding.description.toLowerCase().includes('bandit rule')) return 98;
+  switch (finding.severity.toLowerCase()) {
+    case 'critical': return 92;
+    case 'warning':  return 82;
+    default:         return 70;
+  }
+};
 
 export default function AgentFindingsCard({ agentBreakdowns }) {
   const agentNames = Object.keys(agentBreakdowns);
@@ -47,44 +71,26 @@ export default function AgentFindingsCard({ agentBreakdowns }) {
 
   const activeFindings = agentBreakdowns[activeTab] || [];
 
-  const getSeverityClass = (sev) => {
-    switch (sev.toLowerCase()) {
-      case 'critical': return 'badge-critical';
-      case 'warning': return 'badge-warning';
-      default: return 'badge-suggestion';
-    }
-  };
-
-  const calculateConfidence = (finding) => {
-    const isStaticVerified = finding.description.toLowerCase().includes('bandit rule');
-    if (isStaticVerified) return 98;
-    
-    switch (finding.severity.toLowerCase()) {
-      case 'critical': return 92;
-      case 'warning': return 82;
-      default: return 70;
-    }
-  };
-
   return (
-    <div className="card findings-card">
-      <div className="card-header">
-        <h3>Specialist Agent Reviews</h3>
-        <p className="card-subtitle">Detailed breakdown of findings from each individual AI specialist.</p>
+    <div className="afc-root">
+      {/* Header */}
+      <div className="afc-header">
+        <h3 className="afc-title">Specialist Agent Reviews</h3>
+        <p className="afc-subtitle">Detailed breakdown of findings from each individual AI specialist.</p>
       </div>
 
-      {/* Tabs list */}
-      <div className="tabs-container">
+      {/* Agent tabs */}
+      <div className="afc-tabs">
         {agentNames.map((name) => {
           const count = agentBreakdowns[name]?.length || 0;
           return (
             <button
               key={name}
-              className={`tab-btn ${activeTab === name ? 'active-tab' : ''}`}
+              className={`afc-tab ${activeTab === name ? 'afc-tab--active' : ''}`}
               onClick={() => setActiveTab(name)}
             >
               {name}
-              <span className={`tab-badge ${count > 0 ? 'has-findings' : 'no-findings'}`}>
+              <span className={`afc-tab-count ${count > 0 ? 'afc-tab-count--has' : ''}`}>
                 {count}
               </span>
             </button>
@@ -92,66 +98,64 @@ export default function AgentFindingsCard({ agentBreakdowns }) {
         })}
       </div>
 
-      {/* Findings List */}
-      <div className="tab-content">
+      {/* Findings */}
+      <div className="afc-body">
         {activeFindings.length === 0 ? (
-          <div className="empty-state">
-            <span className="success-icon">✓</span>
-            <h4>No findings reported by this agent.</h4>
+          <div className="rp-empty">
+            <div className="rp-empty-icon">✓</div>
+            <h4>No findings reported by this agent</h4>
             <p>Code meets all criteria checked by the {activeTab}.</p>
           </div>
         ) : (
-          <div className="findings-list">
+          <div className="rp-findings-list">
             {activeFindings.map((finding, idx) => {
               const isStaticVerified = finding.description.toLowerCase().includes('bandit rule');
-              const confidenceScore = calculateConfidence(finding);
-
-              const severityClass = finding.severity.toLowerCase();
-              const verifiedClass = isStaticVerified ? 'verified' : severityClass;
+              const confidence = calcConfidence(finding);
+              const sevKey = finding.severity.toLowerCase();
 
               return (
-                <div key={idx} className={`finding-item ${verifiedClass}`}>
-                  <div className="finding-meta">
-                    <div className="badges-row">
-                      <span className={`badge ${getSeverityClass(finding.severity)}`}>
+                <div key={idx} className={`rp-finding-card rp-finding-card--${sevKey}`}>
+
+                  {/* Top row */}
+                  <div className="rp-finding-top">
+                    <div className="rp-finding-badges">
+                      <span className={SEV_CLS[sevKey] || 'rp-sev rp-sev--info'}>
                         {finding.severity}
                       </span>
                       {isStaticVerified && (
-                        <span className="badge-static-verified">
-                          ⚡ Verified by Bandit SAST
+                        <span className="rp-verified-badge">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Verified by Bandit SAST
                         </span>
                       )}
                     </div>
-                    <span className="finding-file-path">
-                      <code>{finding.file}{finding.line_range ? `:L${finding.line_range}` : ''}</code>
-                    </span>
+                    <code className="rp-finding-file">
+                      {finding.file}{finding.line_range ? `:L${finding.line_range}` : ''}
+                    </code>
                   </div>
-                  
-                  <h4 className="finding-title">{finding.description}</h4>
-                  
-                  {finding.suggestion && (
-                    <CodeFixBlock code={finding.suggestion} />
-                  )}
 
-                  {/* Score Bar - Signature UI Element */}
-                  <div className="confidence-score-container">
-                    <span className="confidence-score-label">Confidence Matrix</span>
-                    <div className="confidence-score-bar-wrapper">
-                      <div 
-                        className={`confidence-score-bar-fill ${isStaticVerified ? 'verified' : finding.severity.toLowerCase()}`} 
-                        style={{ width: `${confidenceScore}%` }} 
+                  {/* Description */}
+                  <p className="rp-finding-desc">{finding.description}</p>
+
+                  {/* Proposed fix */}
+                  {finding.suggestion && <CodeFixBlock code={finding.suggestion} />}
+
+                  {/* Confidence bar */}
+                  <div className="rp-confidence">
+                    <span className="rp-confidence-label">Confidence</span>
+                    <div className="rp-confidence-bar">
+                      <div
+                        className={`rp-confidence-fill rp-confidence-fill--${isStaticVerified ? 'verified' : sevKey}`}
+                        style={{ width: `${confidence}%` }}
                       />
                     </div>
-                    <span 
-                      className="confidence-score-label" 
-                      style={{ 
-                        fontWeight: '600', 
-                        color: isStaticVerified ? 'var(--accent-success)' : 'var(--text-primary)' 
-                      }}
-                    >
-                      {confidenceScore}%
+                    <span className={`rp-confidence-val ${isStaticVerified ? 'rp-confidence-val--verified' : ''}`}>
+                      {confidence}%
                     </span>
                   </div>
+
                 </div>
               );
             })}
