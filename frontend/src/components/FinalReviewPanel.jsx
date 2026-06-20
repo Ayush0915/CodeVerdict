@@ -1,5 +1,44 @@
 import React, { useState } from 'react';
 
+const CodeFixBlock = ({ code }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  return (
+    <div className="code-fix-block">
+      <div className="code-fix-header">
+        <span className="code-fix-lang">proposed fix</span>
+        <button type="button" className="code-copy-btn" onClick={handleCopy}>
+          {copied ? (
+            <span style={{ color: 'var(--accent-success)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Copied!
+            </span>
+          ) : (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </span>
+          )}
+        </button>
+      </div>
+      <pre className="code-block">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+};
+
+
 export default function FinalReviewPanel({ reviewData }) {
   const { summary, findings, pr_url } = reviewData;
   const [filter, setFilter] = useState('All');
@@ -116,12 +155,7 @@ export default function FinalReviewPanel({ reviewData }) {
                 <h4 className="synthesized-desc">{finding.description}</h4>
 
                 {finding.suggestion && (
-                  <div className="synthesized-fix">
-                    <h5>Actionable Code Fix:</h5>
-                    <pre className="code-block">
-                      <code>{finding.suggestion}</code>
-                    </pre>
-                  </div>
+                  <CodeFixBlock code={finding.suggestion} />
                 )}
 
                 {/* Score Bar - Signature UI Element */}
