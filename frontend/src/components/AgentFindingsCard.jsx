@@ -67,8 +67,11 @@ export default function AgentFindingsCard({ agentBreakdowns }) {
               const isStaticVerified = finding.description.toLowerCase().includes('bandit rule');
               const confidenceScore = calculateConfidence(finding);
 
+              const severityClass = finding.severity.toLowerCase();
+              const verifiedClass = isStaticVerified ? 'verified' : severityClass;
+
               return (
-                <div key={idx} className="finding-item">
+                <div key={idx} className={`finding-item ${verifiedClass}`}>
                   <div className="finding-meta">
                     <div className="badges-row">
                       <span className={`badge ${getSeverityClass(finding.severity)}`}>

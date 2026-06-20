@@ -477,20 +477,20 @@ input[type="text"]:focus {
 
 .badge-critical {
   color: var(--accent-critical);
-  background-color: var(--critical-bg);
-  border: 1px solid var(--critical-border);
+  background-color: rgba(244, 63, 94, 0.08);
+  border: 1px solid rgba(244, 63, 94, 0.15);
 }
 
 .badge-warning {
   color: var(--accent-warning);
-  background-color: var(--warning-bg);
-  border: 1px solid var(--warning-border);
+  background-color: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.15);
 }
 
 .badge-suggestion {
-  color: #60a5fa;
-  background-color: var(--suggestion-bg);
-  border: 1px solid var(--suggestion-border);
+  color: var(--accent-primary);
+  background-color: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.15);
 }
 
 .badge-static-verified {
@@ -635,17 +635,34 @@ input[type="text"]:focus {
 
 /* Interactive Staggered Fade-in Animation for Cards */
 .synthesized-item, .finding-item {
-  background-color: rgba(17, 21, 28, 0.45);
+  background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  padding: 1.25rem;
-  transition: border-color var(--transition-fast), transform var(--transition-fast);
+  padding: 1.5rem;
+  transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   animation: card-fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .synthesized-item:hover, .finding-item:hover {
   border-color: rgba(99, 102, 241, 0.25);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+}
+
+.synthesized-item.critical, .finding-item.critical {
+  border-left: 4px solid var(--accent-critical);
+}
+
+.synthesized-item.warning, .finding-item.warning {
+  border-left: 4px solid var(--accent-warning);
+}
+
+.synthesized-item.suggestion, .finding-item.suggestion {
+  border-left: 4px solid var(--accent-primary);
+}
+
+.synthesized-item.verified, .finding-item.verified {
+  border-left: 4px solid var(--accent-success);
 }
 
 /* Stagger indices animation */

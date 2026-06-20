@@ -89,8 +89,11 @@ export default function FinalReviewPanel({ reviewData }) {
             const isStaticVerified = finding.description.toLowerCase().includes('bandit rule');
             const confidenceScore = calculateConfidence(finding);
             
+            const severityClass = finding.severity.toLowerCase();
+            const verifiedClass = isStaticVerified ? 'verified' : severityClass;
+
             return (
-              <div key={idx} className="synthesized-item">
+              <div key={idx} className={`synthesized-item ${verifiedClass}`}>
                 <div className="finding-top-row">
                   <div className="badges-row">
                     <span className={`badge ${getSeverityClass(finding.severity)}`}>
