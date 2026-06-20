@@ -915,3 +915,83 @@ input[type="text"]:focus {
     gap: 1rem;
   }
 }
+
+/* Premium Hero Section */
+.hero-section {
+  text-align: center;
+  margin: 3.5rem 0 2rem 0;
+  animation: hero-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hero-glow-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.03em;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.03);
+}
+
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Connection Badges */
+.badge-conn-type {
+  display: inline-flex;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  margin-left: 0.75rem;
+  vertical-align: middle;
+}
+
+.badge-conn-mock {
+  color: var(--accent-warning);
+  background-color: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.badge-conn-live {
+  color: var(--accent-success);
+  background-color: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}

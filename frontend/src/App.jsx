@@ -41,6 +41,17 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="app-main">
+        {!reviewData && !isLoading && (
+          <div className="hero-section">
+            <span className="hero-glow-badge">✨ Agentic AI Review Engine</span>
+            <h2 className="hero-title">
+              Autonomous Code Reviews, <span className="gradient-text">One Final Verdict</span>
+            </h2>
+            <p className="hero-subtitle">
+              CodeVerdict dispatches separate concurrent reviews to four specialized agents (Security, Quality, Performance, and Test Coverage), then synthesizes and ranks their findings into one unified report.
+            </p>
+          </div>
+        )}
         <PRInputForm onSubmit={handleReviewSubmit} isLoading={isLoading} />
 
         {error && (

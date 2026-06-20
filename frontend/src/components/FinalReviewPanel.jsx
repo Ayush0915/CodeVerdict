@@ -38,11 +38,18 @@ export default function FinalReviewPanel({ reviewData }) {
     ? findings 
     : findings.filter(f => f.category.toLowerCase() === filter.toLowerCase());
 
+  const isMock = pr_url.startsWith('mock://') || pr_url.startsWith('local://');
+
   return (
     <div className="card review-panel">
       <div className="card-header">
         <span className="main-badge">Synthesized Output</span>
-        <h2>Final Synthesized Review</h2>
+        <h2>
+          Final Synthesized Review
+          <span className={`badge-conn-type ${isMock ? 'badge-conn-mock' : 'badge-conn-live'}`}>
+            {isMock ? '⚡ Offline Simulation' : '🌐 Live GitHub'}
+          </span>
+        </h2>
         <p className="pr-reference-url">Target URL: <code>{pr_url}</code></p>
       </div>
 
