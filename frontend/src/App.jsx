@@ -8,178 +8,9 @@ import logoImg from './assets/logo.jpg';
 
 /* ─── Data ───────────────────────────────────────────────────────────────── */
 
-const PROFILES_DATA = {
-  web: {
-    icon: '🌐',
-    title: 'Web Application Security',
-    desc: 'Full OWASP Top 10 coverage for server-rendered and SPA apps. XSS, CSRF, SQLi, broken auth.',
-    badges: ['OWASP Top 10', 'CWE Top 25'],
-    detects: [
-      'SQL / NoSQL injection via cross-file data-flow tracing',
-      'Stored and reflected XSS across templates and responses',
-      'CSRF and session fixation vulnerabilities',
-      'Broken authentication and missing authorization guards',
-    ],
-    finding: {
-      path: 'src/controllers/users.ts:47',
-      title: 'SQL injection via unsanitized `id` param',
-      severity: 'CRITICAL',
-      ctis: '91',
-      cwe: 'CWE-89',
-      map: 'A03:2021',
-      desc: 'Unsanitized `id` param flows from req.params into a raw SQL string with no parameterization or escaping applied.',
-    },
-  },
-  backend: {
-    icon: '⚙️',
-    title: 'API / Backend Integrity',
-    desc: 'Deep parsing of REST, GraphQL, and gRPC endpoints. Analyzes route parameters, headers, and request bodies.',
-    badges: ['OWASP API Top 10', 'gRPC / REST'],
-    detects: [
-      'Mass assignment and parameter pollution vulnerabilities',
-      'Broken object-level authorization (BOLA / IDOR)',
-      'SSRF (Server-Side Request Forgery) in outbound HTTP clients',
-      'Improper rate limiting and resource exhaustion vectors',
-    ],
-    finding: {
-      path: 'backend/routes/billing.py:112',
-      title: 'BOLA via unvalidated tenant ownership checks',
-      severity: 'CRITICAL',
-      ctis: '88',
-      cwe: 'CWE-285',
-      map: 'API01:2023',
-      desc: 'The endpoint fetches billing records using path variable billing_id without verifying the requesting user belongs to the associated organization.',
-    },
-  },
-  android: {
-    icon: '📱',
-    title: 'Android MOB Security',
-    desc: 'Static analysis for Android applications written in Kotlin and Java. Scans intents, permissions, and local storage.',
-    badges: ['OWASP Mobile Top 10', 'Android SDK'],
-    detects: [
-      'Insecure data storage in shared preferences and external storage',
-      'Implicit intents exposing sensitive actions to malicious apps',
-      'Hardcoded API credentials and cryptographic keys',
-      'Insecure SSL/TLS validations and certificate pinning bypasses',
-    ],
-    finding: {
-      path: 'android/app/src/AuthService.kt:84',
-      title: 'Hardcoded cryptographic key in keystore backup',
-      severity: 'HIGH',
-      ctis: '84',
-      cwe: 'CWE-321',
-      map: 'M02:2023',
-      desc: 'Cryptographic operations are initialized using a static hardcoded key string instead of retrieving it securely from the Android Keystore system.',
-    },
-  },
-  ios: {
-    icon: '🍎',
-    title: 'iOS MOB Secure Coding',
-    desc: 'Swift and Objective-C static analysis identifying memory safety, secure storage, and networking issues.',
-    badges: ['OWASP Mobile', 'iOS Secure Coding'],
-    detects: [
-      'Keychain storage configured with weak accessibility flags',
-      'Use of unsafe API functions (e.g. memory copies) in Swift/C bridging',
-      'Local database file encryption (SQLCipher) missing or weak',
-      'Arbitrary HTTP loads permitted in Info.plist (App Transport Security)',
-    ],
-    finding: {
-      path: 'ios/Classes/SecureStorage.swift:23',
-      title: 'Keychain item accessible before first user unlock',
-      severity: 'MEDIUM',
-      ctis: '68',
-      cwe: 'CWE-522',
-      map: 'M01:2023',
-      desc: 'Sensitive session token stored in Keychain with kSecAttrAccessibleAfterFirstUnlock, meaning it remains accessible while the device is locked.',
-    },
-  },
-  cloud: {
-    icon: '☁️',
-    title: 'Cloud & IaC Configuration',
-    desc: 'Scans Terraform, CloudFormation, Helm charts, and Dockerfiles to prevent infrastructure-as-code misconfigurations.',
-    badges: ['CIS Benchmarks', 'IaC Security'],
-    detects: [
-      'Overly permissive IAM policies and security group rules (e.g., 0.0.0.0/0)',
-      'Unencrypted S3 buckets, databases, and key vaults at rest',
-      'Containers configured to run as root or with privileged access',
-      'Missing secret encryption keys or public resource exposure',
-    ],
-    finding: {
-      path: 'terraform/prod/vpc.tf:63',
-      title: 'Security group ingress rule allows SSH from 0.0.0.0/0',
-      severity: 'MEDIUM',
-      ctis: '63',
-      cwe: 'CWE-732',
-      map: 'CIS-5.1',
-      desc: 'VPC security group rules expose SSH port 22 directly to the public internet, leaving host instances open to brute force attempts.',
-    },
-  },
-  secrets: {
-    icon: '🔑',
-    title: 'Secrets & Supply Chain Guard',
-    desc: 'Detects active API keys, database connection strings, SSH keys, and outdated/malicious packages in package manager registries.',
-    badges: ['Secret Detection', 'SBOM Audit'],
-    detects: [
-      'Committed AWS, Google Cloud, Slack, Groq, and GitHub API credentials',
-      'Database connection strings containing plaintext credentials',
-      'Vulnerable open-source dependencies (via OSV database integration)',
-      'Package confusion and dependency hijacking risks in npm/pip',
-    ],
-    finding: {
-      path: 'mobile/AuthManager.kt:84',
-      title: 'Committed plain-text JWT sign secret key',
-      severity: 'HIGH',
-      ctis: '84',
-      cwe: 'CWE-798',
-      map: 'A07:2021',
-      desc: 'Plain-text JWT token signing secret key was committed directly to source control, compromising all security parameters.',
-    },
-  },
-  ai: {
-    icon: '🤖',
-    title: 'Agentic AI Safety Gate',
-    desc: 'Reviews prompts, model integrations, RAG injection guards, and tool execution boundaries in agentic systems.',
-    badges: ['OWASP LLM Top 10', 'Agent Security'],
-    detects: [
-      'Indirect prompt injection vulnerabilities in RAG data pipelines',
-      'Tool calls executing shell scripts or system queries without sandboxing',
-      'Over-reliance on model outputs in sensitive administrative execution paths',
-      'Unbounded tool inputs leading to denial of service or arbitrary code execution',
-    ],
-    finding: {
-      path: 'backend/agents/sql_tool.py:34',
-      title: 'Arbitrary SQL execution tool exposed to LLM output',
-      severity: 'CRITICAL',
-      ctis: '95',
-      cwe: 'CWE-89',
-      map: 'LLM01:2023',
-      desc: 'The database agent executes model-generated query text directly against the primary SQL server without parameter validation or safe read-only limits.',
-    },
-  },
-};
-
-const PIPELINE_NODES = [
-  { id: 'pr', icon: '⬢', label: 'Pull Request', sub: 'GitHub · GitLab · Bitbucket', color: '#6366f1' },
-  { id: 'graph', icon: '⬡', label: 'Codegraph', sub: 'Imports · impact · entry-points', color: '#8b5cf6' },
-  { id: 'security', icon: '⬢', label: 'Security Pipeline', sub: '22 analysis layers', color: '#ec4899' },
-  { id: 'engines', icon: '⬡', label: 'AI Engines', sub: 'Flash · Turbo · Deep consensus', color: '#f59e0b', stacked: true },
-  { id: 'refinement', icon: '⬢', label: 'Signal Refinement', sub: 'FP filter · confidence scoring', color: '#10b981' },
-  { id: 'output', icon: '⬡', label: 'Verified Output', sub: 'Fix PR · Triage · Reports', color: '#0ea5e9', stacked: true },
-];
-
-const MEMORY_CARDS = [
-  { icon: '🌲', title: 'Codegraph Mapping', desc: 'Maps every file, import, and dependency. Calculates impact scores so AI prioritizes high-traffic, high-risk files.' },
-  { icon: '⚙️', title: 'Audit Configuration', desc: 'Set scan depth, severity thresholds, custom suppression rules, and path-specific policies per repository.' },
-  { icon: '🏢', title: 'Business Context', desc: 'Feed README, architecture notes, or role definitions so AI catches domain-specific business logic flaws.' },
-  { icon: '🧠', title: 'Persistent Memory', desc: 'Remembers architecture, suppressions, and team decisions — improving signal-to-noise on every future scan.' },
-];
-
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'Scanner', icon: ScannerIcon },
-  { id: 'profiles', label: 'Profiles', icon: ProfilesIcon },
-  { id: 'pipeline', label: 'Pipeline', icon: PipelineIcon },
-  { id: 'remediation', label: 'Remediation', icon: RemediationIcon },
-  { id: 'memory', label: 'Memory', icon: MemoryIcon },
+  { id: 'about', label: 'About', icon: AboutIcon },
 ];
 
 /* ─── SVG Icons ──────────────────────────────────────────────────────────── */
@@ -192,37 +23,12 @@ function ScannerIcon({ size = 18 }) {
   );
 }
 
-function ProfilesIcon({ size = 18 }) {
+function AboutIcon({ size = 18 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-  );
-}
-
-function PipelineIcon({ size = 18 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="5" r="3" /><line x1="12" y1="8" x2="12" y2="16" />
-      <circle cx="12" cy="19" r="3" /><line x1="6" y1="11" x2="18" y2="11" />
-    </svg>
-  );
-}
-
-function RemediationIcon({ size = 18 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-  );
-}
-
-function MemoryIcon({ size = 18 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="16" x2="12" y2="12" />
+      <line x1="12" y1="8" x2="12.01" y2="8" />
     </svg>
   );
 }
@@ -297,7 +103,7 @@ function AnimatedCounter({ target, suffix = '' }) {
 
 /* ─── Live scan terminal window ─────────────────────────────────────────── */
 
-function LiveScanWindow({ onProfileClick }) {
+function LiveScanWindow() {
   return (
     <div className="terminal-window">
       <div className="terminal-titlebar">
@@ -314,28 +120,28 @@ function LiveScanWindow({ onProfileClick }) {
       </div>
 
       <div className="terminal-body">
-        {/* Exploit path */}
+        {/* Finding path */}
         <div className="exploit-card">
           <div className="exploit-card-header">
             <div>
-              <span className="exploit-label">EXPLOIT PATH</span>
-              <span className="exploit-cwe">CWE-89</span>
+              <span className="exploit-label">VULNERABILITY PATH</span>
+              <span className="exploit-cwe">CWE-89 (SQL Injection)</span>
             </div>
-            <span className="exploit-pill">Active Exploit</span>
+            <span className="exploit-pill">Flagged by Security Agent</span>
           </div>
           <div className="exploit-trace">
-            <code className="trace-node trace-source">req.params.id</code>
+            <code className="trace-node trace-source">request.query</code>
             <span className="trace-arrow">→</span>
-            <code className="trace-node trace-func">db.raw()</code>
+            <code className="trace-node trace-func">execute()</code>
             <span className="trace-arrow">→</span>
-            <code className="trace-node trace-sink">SELECT * FROM users</code>
+            <code className="trace-node trace-sink">raw SQL statement</code>
           </div>
           <div className="exploit-score-row">
-            <span className="exploit-score-label">EXPLOITABILITY</span>
+            <span className="exploit-score-label">CONFIDENCE</span>
             <div className="exploit-score-bar">
               <div className="exploit-score-fill" style={{ width: '91%' }} />
             </div>
-            <span className="exploit-score-num">91/100</span>
+            <span className="exploit-score-num">91%</span>
           </div>
         </div>
 
@@ -345,41 +151,41 @@ function LiveScanWindow({ onProfileClick }) {
             <div className="fi-left">
               <SeverityBadge level="CRITICAL" />
               <div className="fi-text">
-                <span className="fi-path">github.com/acme/api</span>
-                <span className="fi-desc">req.params.id → raw SQL</span>
+                <span className="fi-path">backend/app/routes/auth.py</span>
+                <span className="fi-desc">query param → raw SQL format</span>
               </div>
             </div>
             <div className="fi-score">
               <div className="fi-bar-wrap"><div className="fi-bar fi-bar--critical" style={{ width: '91%' }} /></div>
-              <span className="fi-num">91</span>
+              <span className="fi-num">91%</span>
             </div>
           </div>
 
-          <div className="findings-list-item" style={{ cursor: 'pointer' }} onClick={onProfileClick}>
+          <div className="findings-list-item">
             <div className="fi-left">
               <SeverityBadge level="HIGH" />
               <div className="fi-text">
-                <span className="fi-path">mobile/AuthManager.kt</span>
-                <span className="fi-desc">JWT_SECRET → committed source</span>
+                <span className="fi-path">backend/app/config.py</span>
+                <span className="fi-desc">hardcoded credential in fallback</span>
               </div>
             </div>
             <div className="fi-score">
               <div className="fi-bar-wrap"><div className="fi-bar fi-bar--high" style={{ width: '84%' }} /></div>
-              <span className="fi-num">84</span>
+              <span className="fi-num">84%</span>
             </div>
           </div>
 
-          <div className="findings-list-item" style={{ cursor: 'pointer' }} onClick={onProfileClick}>
+          <div className="findings-list-item">
             <div className="fi-left">
               <SeverityBadge level="MEDIUM" />
               <div className="fi-text">
-                <span className="fi-path">terraform/prod/vpc.tf</span>
-                <span className="fi-desc">0.0.0.0/0 → admin port</span>
+                <span className="fi-path">backend/app/main.py</span>
+                <span className="fi-desc">subprocess.run with shell=True</span>
               </div>
             </div>
             <div className="fi-score">
               <div className="fi-bar-wrap"><div className="fi-bar fi-bar--medium" style={{ width: '63%' }} /></div>
-              <span className="fi-num">63</span>
+              <span className="fi-num">63%</span>
             </div>
           </div>
         </div>
@@ -395,8 +201,6 @@ export default function App() {
   const [reviewData, setReviewData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [activeProfileTab, setActiveProfileTab] = useState('web');
-  const [activeRemStep, setActiveRemStep] = useState(1);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleReviewSubmit = async (url) => {
@@ -414,8 +218,6 @@ export default function App() {
     }
   };
 
-  const activeProfile = PROFILES_DATA[activeProfileTab];
-
   const navigateTo = (view) => {
     setCurrentView(view);
     if (view === 'dashboard') { setReviewData(null); setError(null); }
@@ -431,9 +233,9 @@ export default function App() {
           {/* Brand */}
           <div className="cs-brand" onClick={() => navigateTo('dashboard')}>
             <div className="cs-brand-logo">
-              <img src={logoImg} alt="CodeSentry Logo" className="cs-logo-img" />
+              <img src={logoImg} alt="CodeVerdict Logo" className="cs-logo-img" />
             </div>
-            <span className="cs-brand-name">CodeSentry</span>
+            <span className="cs-brand-name">CodeVerdict</span>
           </div>
 
           {/* Nav */}
@@ -499,7 +301,7 @@ export default function App() {
             </button>
             {/* Breadcrumb */}
             <div className="cs-breadcrumb">
-              <span className="cs-breadcrumb-root">CodeSentry</span>
+              <span className="cs-breadcrumb-root">CodeVerdict</span>
               <ChevronRight />
               <span className="cs-breadcrumb-current">
                 {NAV_ITEMS.find(n => n.id === currentView)?.label}
@@ -533,18 +335,18 @@ export default function App() {
                     <div className="cs-hero-left">
                       <div className="cs-hero-badge">
                         <span className="cs-badge-pulse" />
-                        offense → defense · Thinks like a hacker. Fixes like an engineer.
+                        Four agents review. One verdict ships.
                       </div>
 
                       <h1 className="cs-hero-title">
                         The calm security layer for{' '}
                         <span className="cs-gradient-text">
-                          <TypedText phrases={['fast shipping teams.', 'modern engineering.', 'production codebases.', 'every PR you push.']} />
+                          <TypedText phrases={['fast shipping teams.', 'python projects.', 'production codebases.', 'every PR you push.']} />
                         </span>
                       </h1>
 
                       <p className="cs-hero-sub">
-                        CodeSentry reviews every PR like a senior AppSec engineer — it traces real exploit paths, ranks what's actually dangerous, then ships verified fix PRs and threat models with zero process drag.
+                        CodeVerdict reviews every pull request with four specialized AI agents — security, quality, performance, and test coverage — each grounded in real tooling and reference material. A final synthesis step merges their findings into one clear, ranked review.
                       </p>
 
                       <div className="cs-hero-stats">
@@ -559,8 +361,8 @@ export default function App() {
                         </div>
                         <div className="cs-hstat-divider" />
                         <div className="cs-hstat">
-                          <span className="cs-hstat-num">22</span>
-                          <span className="cs-hstat-lbl">Analysis Layers</span>
+                          <span className="cs-hstat-num">4</span>
+                          <span className="cs-hstat-lbl">Specialist Agents</span>
                         </div>
                       </div>
 
@@ -568,16 +370,8 @@ export default function App() {
                     </div>
 
                     <div className="cs-hero-right">
-                      <LiveScanWindow onProfileClick={() => setCurrentView('profiles')} />
+                      <LiveScanWindow />
                     </div>
-                  </div>
-
-                  {/* Trust strip */}
-                  <div className="cs-trust-strip">
-                    <span className="cs-trust-label">TRUSTED ANALYSIS STANDARDS</span>
-                    {['OWASP Top 10', 'CWE Top 25', 'OWASP API Top 10', 'STRIDE', 'CIS Benchmarks', 'SARIF 2.1', 'OSV.dev'].map(t => (
-                      <span key={t} className="cs-trust-pill">{t}</span>
-                    ))}
                   </div>
                 </>
               )}
@@ -608,296 +402,74 @@ export default function App() {
             </div>
           )}
 
-          {/* ── VIEW: PROFILES ────────────────────────────────── */}
-          {currentView === 'profiles' && (
+          {/* ── VIEW: ABOUT ───────────────────────────────────── */}
+          {currentView === 'about' && (
             <div className="cs-page">
               <div className="cs-page-header">
-                <span className="cs-page-tag">7 Purpose-Built Scan Profiles</span>
-                <h2 className="cs-page-title">Every codebase type. Every major framework.</h2>
+                <span className="cs-page-tag">System Architecture</span>
+                <h2 className="cs-page-title">Honest Agentic Review</h2>
                 <p className="cs-page-desc">
-                  Web apps, REST/GraphQL APIs, Android, iOS, Cloud & IaC, supply chain, and agentic AI integrations — specialized detectors, compliance mappings, and live findings tuned for each attack surface.
+                  CodeVerdict is a stateless developer portfolio project showcasing a multi-agent review workflow for Python code.
                 </p>
               </div>
 
-              {/* Profile tabs */}
-              <div className="cs-profile-tabs">
-                {Object.entries(PROFILES_DATA).map(([key, val]) => (
-                  <button
-                    key={key}
-                    className={`cs-profile-tab ${activeProfileTab === key ? 'cs-profile-tab--active' : ''}`}
-                    onClick={() => setActiveProfileTab(key)}
-                  >
-                    <span>{val.icon}</span>
-                    <span>{val.title.split(' ')[0]}</span>
-                  </button>
-                ))}
-              </div>
-
-              {/* Profile detail split */}
-              <div className="cs-profile-split">
-                {/* Left */}
-                <div className="cs-profile-left">
-                  <div className="cs-profile-icon-large">{activeProfile.icon}</div>
-                  <h3 className="cs-profile-title">{activeProfile.title}</h3>
-                  <p className="cs-profile-desc">{activeProfile.desc}</p>
-
-                  <div className="cs-profile-badges">
-                    {activeProfile.badges.map((b, i) => (
-                      <span key={i} className="cs-badge-pill cs-badge-pill--indigo">{b}</span>
-                    ))}
-                  </div>
-
-                  <div className="cs-detects">
-                    <div className="cs-detects-header">What it detects</div>
-                    {activeProfile.detects.map((d, i) => (
-                      <div key={i} className="cs-detect-row">
-                        <span className="cs-detect-check">✓</span>
-                        <span>{d}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right: example finding */}
-                <div className="cs-finding-card">
-                  <div className="cs-finding-card-header">
-                    <span className="cs-finding-label">Example Finding</span>
-                    <SeverityBadge level={activeProfile.finding.severity} />
-                  </div>
-                  <div className="cs-finding-body">
-                    <code className="cs-finding-path">{activeProfile.finding.path}</code>
-                    <h4 className="cs-finding-title">{activeProfile.finding.title}</h4>
-
-                    <div className="cs-finding-metrics">
-                      <div className="cs-fm-box">
-                        <span className="cs-fm-lbl">CTIS Score</span>
-                        <span className="cs-fm-val cs-fm-val--big">{activeProfile.finding.ctis}</span>
-                      </div>
-                      <div className="cs-fm-box">
-                        <span className="cs-fm-lbl">CWE ID</span>
-                        <span className="cs-fm-val">{activeProfile.finding.cwe}</span>
-                      </div>
-                      <div className="cs-fm-box">
-                        <span className="cs-fm-lbl">Framework Map</span>
-                        <span className="cs-fm-val">{activeProfile.finding.map}</span>
-                      </div>
+              <div className="cs-about-grid">
+                {/* Architecture Card */}
+                <div className="cs-about-card cs-about-card--span2">
+                  <div className="cs-about-card-icon">⚡</div>
+                  <h3 className="cs-about-card-title">How It Works</h3>
+                  <p className="cs-about-card-text" style={{ marginBottom: '1.25rem' }}>
+                    CodeVerdict integrates four specialist AI agents running in parallel to analyze your pull requests, combined with a central synthesizer agent that compiles the final report.
+                  </p>
+                  
+                  <div className="cs-about-agents-list">
+                    <div className="cs-about-agent-item" style={{ marginBottom: '1rem', borderLeft: '3px solid var(--accent-red)', paddingLeft: '0.75rem' }}>
+                      <span className="cs-about-agent-name" style={{ fontWeight: '600', color: 'var(--accent-red)', display: 'block', marginBottom: '0.25rem' }}>Security Agent</span>
+                      <span className="cs-about-agent-desc">Runs Bandit static analysis + Llama-3 reasoning to isolate vulnerabilities (CWE) and retrieve secure coding guidelines via local FAISS/NumPy vectors.</span>
                     </div>
-
-                    <p className="cs-finding-desc">{activeProfile.finding.desc}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── VIEW: PIPELINE ────────────────────────────────── */}
-          {currentView === 'pipeline' && (
-            <div className="cs-page">
-              <div className="cs-page-header">
-                <span className="cs-page-tag">Consensus Pipeline</span>
-                <h2 className="cs-page-title">The intelligence behind every scan.</h2>
-                <p className="cs-page-desc">
-                  Every pull request flows through code-context mapping, specialized analysis engines, multi-model reasoning with cross-model consensus, and deterministic signal refinement — landing as a verified fix PR, triage queue, and compliance reports.
-                </p>
-              </div>
-
-              {/* Horizontal pipeline */}
-              <div className="cs-pipeline-wrapper">
-                <div className="cs-pipeline-track">
-                  {/* PR input */}
-                  <PipelineNode
-                    icon="📬" label="Pull Request" sub="GitHub · GitLab · Bitbucket"
-                    color="#6366f1" active />
-                  <PipelineArrow active />
-                  <PipelineNode
-                    icon="🌲" label="Codegraph" sub="Imports · impact · entry-points"
-                    color="#8b5cf6" active />
-                  <PipelineArrow active />
-                  <PipelineNode
-                    icon="🔒" label="Security Pipeline" sub="22 analysis layers"
-                    color="#ec4899" active />
-                  <PipelineArrow active />
-
-                  {/* Stacked engines */}
-                  <div className="cs-pipeline-stack">
-                    {[
-                      { icon: '🤖', label: 'AI Code Review', sub: 'Critical files first', c: '#f43f5e' },
-                      { icon: '💧', label: 'Cross-file Taint', sub: 'Source → sink', c: '#f59e0b' },
-                      { icon: '🌳', label: 'Tree-sitter AST', sub: 'Data-flow tracing', c: '#6366f1' },
-                      { icon: '📦', label: 'Dependency CVE', sub: 'OSV.dev advisories', c: '#10b981' },
-                      { icon: '📈', label: 'Threat Modeling', sub: 'STRIDE · ASI Top 10', c: '#7c3aed' },
-                    ].map((e, i) => (
-                      <div key={i} className="cs-pipeline-stack-node" style={{ borderLeft: `3px solid ${e.c}` }}>
-                        <span className="cs-stack-icon">{e.icon}</span>
-                        <div>
-                          <span className="cs-pnode-label">{e.label}</span>
-                          <span className="cs-pnode-sub">{e.sub}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <PipelineArrow />
-                  <PipelineNode icon="🧠" label="AI Consensus" sub="Flash · Turbo · Deep" color="#0ea5e9" />
-                  <PipelineArrow />
-                  <PipelineNode icon="🎛️" label="Signal Refinement" sub="FP filter · confidence" color="#10b981" />
-                  <PipelineArrow />
-
-                  {/* Stacked outputs */}
-                  <div className="cs-pipeline-stack">
-                    {[
-                      { icon: '🚀', label: 'Verified Fix PR', sub: 'Re-scanned & merged', c: '#10b981' },
-                      { icon: '📋', label: 'Triage Dashboard', sub: 'Review & approve', c: '#f59e0b' },
-                      { icon: '📊', label: 'Compliance Reports', sub: 'SARIF · PDF', c: '#6366f1' },
-                    ].map((e, i) => (
-                      <div key={i} className="cs-pipeline-stack-node" style={{ borderRight: `3px solid ${e.c}`, borderLeft: 'none', textAlign: 'right' }}>
-                        <div>
-                          <span className="cs-pnode-label">{e.label}</span>
-                          <span className="cs-pnode-sub">{e.sub}</span>
-                        </div>
-                        <span className="cs-stack-icon">{e.icon}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats row */}
-              <div className="cs-pipeline-stats">
-                {[
-                  { val: '22', lbl: 'Analysis Layers' },
-                  { val: '3', lbl: 'Consensus Models' },
-                  { val: '<45s', lbl: 'Avg. Scan Time' },
-                  { val: '0', lbl: 'CI Pipeline Changes' },
-                ].map((s, i) => (
-                  <div key={i} className="cs-pstat">
-                    <span className="cs-pstat-val">{s.val}</span>
-                    <span className="cs-pstat-lbl">{s.lbl}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ── VIEW: REMEDIATION ────────────────────────────── */}
-          {currentView === 'remediation' && (
-            <div className="cs-page">
-              <div className="cs-page-header">
-                <span className="cs-page-tag">Remediation Console</span>
-                <h2 className="cs-page-title">From repo install to verified patch PR.</h2>
-                <p className="cs-page-desc">
-                  A fast path for teams that want security to feel native to engineering — not like a meeting, spreadsheet or another portal to babysit.
-                </p>
-              </div>
-
-              <div className="cs-rem-split">
-                {/* Steps */}
-                <div className="cs-rem-steps">
-                  {[
-                    {
-                      step: 1, tag: 'Connect', title: 'Install once',
-                      desc: 'Connect GitHub, GitLab or Bitbucket. Select repos and start scanning without YAML configurations or CI pipeline rewrites.',
-                    },
-                    {
-                      step: 2, tag: 'Analyze', title: 'Audit every change',
-                      desc: 'Every PR receives a full codebase graph security scan, dynamic exploitability scoring, and thorough source-to-sink vulnerability explanation.',
-                    },
-                    {
-                      step: 3, tag: 'Fix', title: 'Ship verified patches',
-                      desc: 'Automatically generate a localized remediation PR, execute pipeline re-scans, and merge the resolved checks with cryptographic evidence.',
-                    },
-                  ].map(({ step, tag, title, desc }) => (
-                    <div
-                      key={step}
-                      className={`cs-rem-step ${activeRemStep === step ? 'cs-rem-step--active' : ''}`}
-                      onClick={() => setActiveRemStep(step)}
-                    >
-                      <div className="cs-rem-step-number">{step < 10 ? `0${step}` : step}</div>
-                      <div className="cs-rem-step-content">
-                        <span className="cs-rem-tag">{tag}</span>
-                        <h4 className="cs-rem-title">{title}</h4>
-                        <p className="cs-rem-desc">{desc}</p>
-                        {activeRemStep === step && <div className="cs-rem-progress" />}
-                      </div>
+                    <div className="cs-about-agent-item" style={{ marginBottom: '1rem', borderLeft: '3px solid var(--accent-yellow)', paddingLeft: '0.75rem' }}>
+                      <span className="cs-about-agent-name" style={{ fontWeight: '600', color: 'var(--accent-yellow)', display: 'block', marginBottom: '0.25rem' }}>Quality Agent</span>
+                      <span className="cs-about-agent-desc">Evaluates syntax validity, PEP 8 styling conventions, missing docstrings, and overall code structural cleanliness.</span>
                     </div>
-                  ))}
-                </div>
-
-                {/* Code panel */}
-                <div className="cs-rem-code-panel">
-                  <div className="cs-rem-code-header">
-                    <div>
-                      <span className="cs-rem-code-title">Verified Remediation</span>
-                      <span className="cs-rem-code-sub">Auto-generated patch PR</span>
+                    <div className="cs-about-agent-item" style={{ marginBottom: '1rem', borderLeft: '3px solid var(--indigo)', paddingLeft: '0.75rem' }}>
+                      <span className="cs-about-agent-name" style={{ fontWeight: '600', color: 'var(--indigo)', display: 'block', marginBottom: '0.25rem' }}>Performance Agent</span>
+                      <span className="cs-about-agent-desc">Detects algorithmic bottlenecks, inefficient iterations, unoptimized database query patterns, and possible memory leaks.</span>
                     </div>
-                    <span className="cs-rem-code-status">
-                      <span className="cs-status-dot cs-status-dot--live" />
-                      Auto-fix PR opened
-                    </span>
-                  </div>
-                  <div className="cs-rem-diff">
-                    {[
-                      { type: 'del', code: '- const query = `SELECT * FROM users WHERE id = ${id}`;' },
-                      { type: 'add', code: '+ const query = db.where(eq(users.id, userId));' },
-                      { type: 'neutral', code: '  // Guard: verify tenant access' },
-                      { type: 'add', code: '+ assertTenantAccess(session.orgId, userId);' },
-                      { type: 'neutral', code: '' },
-                      { type: 'info', code: '  // Test: rejects cross-tenant object access' },
-                      { type: 'add', code: '+ expect(fetchUser(otherOrgUserId)).rejects(ForbiddenError);' },
-                    ].map((line, i) => (
-                      <div key={i} className={`cs-diff-line cs-diff-line--${line.type}`}>
-                        <code>{line.code}</code>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="cs-rem-verify-row">
-                    <span className="cs-verify-icon">✓</span>
-                    <span className="cs-verify-text">Source-to-sink path closed · Re-scan passed · PR merged</span>
+                    <div className="cs-about-agent-item" style={{ borderLeft: '3px solid var(--accent-green)', paddingLeft: '0.75rem' }}>
+                      <span className="cs-about-agent-name" style={{ fontWeight: '600', color: 'var(--accent-green)', display: 'block', marginBottom: '0.25rem' }}>Coverage Agent</span>
+                      <span className="cs-about-agent-desc">Inspects lines of code modified, outlines test gaps, and recommends mock tests and unit test cases.</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
 
-          {/* ── VIEW: MEMORY ─────────────────────────────────── */}
-          {currentView === 'memory' && (
-            <div className="cs-page">
-              <div className="cs-page-header">
-                <span className="cs-page-tag">Knowledge Memory</span>
-                <h2 className="cs-page-title">AI that learns, remembers, and improves.</h2>
-                <p className="cs-page-desc">
-                  CodeSentry builds a living memory graph of your codebase — learning architecture, suppressing noise, and applying your team's decisions automatically on every future scan.
-                </p>
-              </div>
-
-              <div className="cs-memory-grid">
-                {MEMORY_CARDS.map((card, i) => (
-                  <div key={i} className="cs-mem-card">
-                    <div className="cs-mem-card-icon">{card.icon}</div>
-                    <h4 className="cs-mem-card-title">{card.title}</h4>
-                    <p className="cs-mem-card-desc">{card.desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="cs-memory-banner">
-                <div className="cs-mem-banner-icon">📈</div>
-                <div className="cs-mem-banner-content">
-                  <span className="cs-mem-banner-title">AI learns from every scan</span>
-                  <span className="cs-mem-banner-desc">
-                    The memory graph persists across every scan, remembers your architecture, learns false-positive patterns in your codebase, and improves signal-to-noise automatically over time. No manual tuning required.
-                  </span>
+                {/* Technology Stack Card */}
+                <div className="cs-about-card">
+                  <div className="cs-about-card-icon">🛠️</div>
+                  <h3 className="cs-about-card-title">Technology Stack</h3>
+                  <ul className="cs-about-list" style={{ paddingLeft: '1.25rem', lineHeight: '1.6' }}>
+                    <li><strong>FastAPI</strong> — High-performance Python backend server</li>
+                    <li><strong>React & Vite</strong> — Single Page Application frontend</li>
+                    <li><strong>Groq Cloud API</strong> — Runs Llama-3.3-70b-versatile with low latency</li>
+                    <li><strong>Bandit SAST</strong> — Real static application security scanning</li>
+                    <li><strong>NumPy Similarity</strong> — Lightweight vector memory fallback</li>
+                  </ul>
                 </div>
-                <button className="cs-mem-banner-cta" onClick={() => navigateTo('dashboard')}>
-                  Try a scan →
-                </button>
+
+                {/* Project Philosophy Card */}
+                <div className="cs-about-card">
+                  <div className="cs-about-card-icon">⚖️</div>
+                  <h3 className="cs-about-card-title">Stateless Design</h3>
+                  <p className="cs-about-card-text">
+                    CodeVerdict does not open auto-fix PRs, execute dynamic exploit scripts, or store history. Every analysis is executed stateless and in isolation, ensuring developers have full oversight and absolute control.
+                  </p>
+                </div>
               </div>
             </div>
           )}
 
           {/* Footer */}
           <footer className="cs-footer">
-            <span>© 2026 CodeSentry</span>
+            <span>© 2026 CodeVerdict</span>
             <span>·</span>
             <span>Built for Technical Review Portfolio</span>
             <span>·</span>
@@ -905,27 +477,6 @@ export default function App() {
           </footer>
         </main>
       </div>
-    </div>
-  );
-}
-
-/* ─── Pipeline helper components ─────────────────────────────────────────── */
-
-function PipelineNode({ icon, label, sub, color, active }) {
-  return (
-    <div className={`cs-pnode ${active ? 'cs-pnode--active' : ''}`} style={{ '--pnode-color': color }}>
-      <div className="cs-pnode-icon" style={{ background: `${color}18`, borderColor: `${color}30`, color }}>{icon}</div>
-      <span className="cs-pnode-label">{label}</span>
-      <span className="cs-pnode-sub">{sub}</span>
-    </div>
-  );
-}
-
-function PipelineArrow({ active }) {
-  return (
-    <div className={`cs-parrow ${active ? 'cs-parrow--active' : ''}`}>
-      <div className="cs-parrow-line" />
-      <div className="cs-parrow-head" />
     </div>
   );
 }

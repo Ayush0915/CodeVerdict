@@ -56,7 +56,7 @@ export default function LoadingState() {
           <div className="ls-ring ls-ring--delay" />
         </div>
         <div className="ls-header-text">
-          <h3 className="ls-title">Running CodeSentry Pipeline</h3>
+          <h3 className="ls-title">Running CodeVerdict Pipeline</h3>
           <p className="ls-phase">{LOADING_PHASES[phaseIndex].text}</p>
         </div>
       </div>

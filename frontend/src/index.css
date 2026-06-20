@@ -1,5 +1,5 @@
 /* =========================================================
-   CodeSentry — Production-Grade Design System
+   CodeVerdict — Production-Grade Design System
    ========================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -2662,4 +2662,91 @@ button:focus-visible, input:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+/* ─── About View ────────────────────────────────────────── */
+.cs-about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.cs-about-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cs-about-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.cs-about-card--span2 {
+  grid-column: span 2;
+}
+
+.cs-about-card-icon {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.cs-about-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.cs-about-card-text {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.cs-about-agents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cs-about-agent-item {
+  background: var(--bg-surface-2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.cs-about-agent-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.cs-about-agent-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.cs-about-list {
+  color: var(--text-secondary);
+  padding-left: 1.25rem;
+}
+
+.cs-about-list li {
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .cs-about-grid {
+    grid-template-columns: 1fr;
+  }
+  .cs-about-card--span2 {
+    grid-column: span 1;
+  }
 }
