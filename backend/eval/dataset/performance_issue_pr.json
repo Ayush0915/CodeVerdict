@@ -1,0 +1,23 @@
+{
+  "pr_url": "mock://eval/dataset/performance_issue_pr.json",
+  "title": "Batch processing of user reports",
+  "body": "Implements a system to load user activity stats. Iterates over users and fetches details from database.",
+  "expected_issues": [
+    {
+      "category": "Performance",
+      "description_pattern": "n\\+1|n \\+ 1|query in loop|repeated query"
+    },
+    {
+      "category": "Quality",
+      "description_pattern": "except|bare except|exception"
+    }
+  ],
+  "files": [
+    {
+      "filename": "reports.py",
+      "status": "modified",
+      "patch": "@@ -5,12 +5,21 @@\n def get_user_reports(db, user_ids):\n-    # Safe batch loading\n-    pass\n+    reports = []\n+    for user_id in user_ids:\n+        # N+1 query issue: query inside loop instead of batch query\n+        user_data = db.execute(\"SELECT * FROM users WHERE id = ?\", (user_id,)).fetchone()\n+        reports.append(user_data)\n+    return reports\n \n def parse_data(raw_str):\n-    # Safe parser\n-    pass\n+    try:\n+        return json.loads(raw_str)\n+    except:\n+        # Bare except block style issue\n+        return {}\n",
+      "content": "import json\n\ndef get_user_reports(db, user_ids):\n    reports = []\n    for user_id in user_ids:\n        # N+1 query issue: query inside loop instead of batch query\n        user_data = db.execute(\"SELECT * FROM users WHERE id = ?\", (user_id,)).fetchone()\n        reports.append(user_data)\n    return reports\n\ndef parse_data(raw_str):\n    try:\n        return json.loads(raw_str)\n    except:\n        # Bare except block style issue\n        return {}\n"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "pr_url": "mock://eval/dataset/untested_code_pr.json",
+  "title": "Add password validation logic",
+  "body": "Introduces validators for complex password strength checks. Ensures numbers, symbols, and casing are verified.",
+  "expected_issues": [
+    {
+      "category": "Coverage",
+      "description_pattern": "test|coverage|untested|missing test"
+    }
+  ],
+  "files": [
+    {
+      "filename": "validators.py",
+      "status": "added",
+      "patch": "@@ -0,0 +1,15 @@\n+import re\n+\n+def validate_password_strength(password: str) -> bool:\n+    # Complex password requirements: length >= 8, must contain digit, upper, lower, and symbol\n+    if len(password) < 8:\n+        return False\n+    if not re.search(r\"[A-Z]\", password):\n+        return False\n+    if not re.search(r\"[a-z]\", password):\n+        return False\n+    if not re.search(r\"[0-9]\", password):\n+        return False\n+    if not re.search(r\"[!@#$%^&*(),.?\\\":{}|<>_]\", password):\n+        return False\n+    return True\n",
+      "content": "import re\n\ndef validate_password_strength(password: str) -> bool:\n    # Complex password requirements: length >= 8, must contain digit, upper, lower, and symbol\n    if len(password) < 8:\n        return False\n    if not re.search(r\"[A-Z]\", password):\n        return False\n    if not re.search(r\"[a-z]\", password):\n        return False\n    if not re.search(r\"[0-9]\", password):\n        return False\n    if not re.search(r\"[!@#$%^&*(),.?\\\":{}|<>_]\", password):\n        return False\n    return True\n"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "pr_url": "mock://eval/dataset/vulnerable_pr.json",
+  "title": "Fix user operations and add database connector",
+  "body": "This pull request implements user operation logging and introduces the Postgres database connector module. Also updates some utility functions.",
+  "expected_issues": [
+    {
+      "category": "Security",
+      "description_pattern": "shell"
+    },
+    {
+      "category": "Security",
+      "description_pattern": "credential|password|secret"
+    },
+    {
+      "category": "Quality",
+      "description_pattern": "PEP 8|name|naming|case"
+    },
+    {
+      "category": "Quality",
+      "description_pattern": "duplicate|dry"
+    }
+  ],
+  "files": [
+    {
+      "filename": "ops.py",
+      "status": "modified",
+      "patch": "@@ -1,15 +1,24 @@\n import os\n+import subprocess\n \n def run_user_cmd(cmd):\n-    # Run command safely\n-    pass\n+    # Execute shell command directly from user input\n+    return subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read()\n \n def connect_db():\n-    # Safe db connection\n-    pass\n+    # Hardcoded credential vulnerability\n+    db_url = \"postgresql://admin:supersecretpassword123@localhost:5432/dbname\"\n+    return db_url\n",
+      "content": "import os\nimport subprocess\n\ndef run_user_cmd(cmd):\n    # Execute shell command directly from user input\n    return subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read()\n\ndef connect_db():\n    # Hardcoded credential vulnerability\n    db_url = \"postgresql://admin:supersecretpassword123@localhost:5432/dbname\"\n    return db_url\n"
+    },
+    {
+      "filename": "math_utils.py",
+      "status": "added",
+      "patch": "@@ -0,0 +1,20 @@\n+def FUNC1(x,y):\n+ z = x+y\n+ print(\"adding things\", z)\n+ return z\n+\n+def FUNC2(x,y):\n+ # duplicate logic\n+ z = x+y\n+ print(\"adding things\", z)\n+ return z\n",
+      "content": "def FUNC1(x,y):\n z = x+y\n print(\"adding things\", z)\n return z\n\ndef FUNC2(x,y):\n # duplicate logic\n z = x+y\n print(\"adding things\", z)\n return z\n"
+    }
+  ]
+}
