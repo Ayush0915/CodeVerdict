@@ -16,7 +16,6 @@ backend/temp_prs/
 frontend/node_modules/
 frontend/dist/
 frontend/.eslintcache
-frontend/src/assets/
 
 # IDE / Project settings
 .idea/
