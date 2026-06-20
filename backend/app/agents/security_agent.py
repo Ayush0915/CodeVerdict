@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any
 from app.agents.base_agent import BaseAgent
 from app.models.schemas import Finding, AgentReviewResult
 from app.tools.bandit_runner import BanditRunner

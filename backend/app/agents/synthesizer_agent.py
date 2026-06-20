@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Dict, Any, List
+from typing import Dict, List
 from app.agents.base_agent import BaseAgent
 from app import config
 from app.models.schemas import Finding, SynthesisResult

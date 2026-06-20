@@ -1,7 +1,7 @@
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any
 from app.agents.base_agent import BaseAgent
-from app.models.schemas import Finding, AgentReviewResult
+from app.models.schemas import AgentReviewResult
 from app.rag.vector_store import vector_store
 
 logger = logging.getLogger(__name__)

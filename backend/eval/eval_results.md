@@ -1,7 +1,7 @@
 # CodeVerdict Evaluation Results
 
 **Date:** 2026-06-20
-**Model configuration:** llama-3.3-70b-versatile
+**Model configuration:** llama-3.1-8b-instant
 **Execution mode:** Deterministic simulation & live API fallback
 
 ## Overall Metrics

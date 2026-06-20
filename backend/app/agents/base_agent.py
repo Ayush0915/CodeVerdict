@@ -1,7 +1,7 @@
 import json
 import logging
 import re
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from app.models.schemas import Finding, AgentReviewResult
 from app.llm.groq_client import groq_client
 

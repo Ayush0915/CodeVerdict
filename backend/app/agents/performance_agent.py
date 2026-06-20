@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any
 from app.agents.base_agent import BaseAgent
-from app.models.schemas import Finding, AgentReviewResult
+from app.models.schemas import AgentReviewResult
 
 logger = logging.getLogger(__name__)
 

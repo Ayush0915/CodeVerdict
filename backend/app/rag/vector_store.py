@@ -1,8 +1,7 @@
-import os
 import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any
 import numpy as np
 from app import config
 from app.rag.embed import Embedder, chunk_document

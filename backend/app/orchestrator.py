@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import time
-from typing import Dict, List, Any
+from typing import Dict, List
 from app.github_client import github_client
 from app.agents.security_agent import SecurityAgent
 from app.agents.quality_agent import QualityAgent

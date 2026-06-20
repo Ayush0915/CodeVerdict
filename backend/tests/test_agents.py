@@ -1,6 +1,5 @@
 import unittest
 import asyncio
-from unittest.mock import patch, MagicMock
 from app.agents.security_agent import SecurityAgent
 from app.agents.quality_agent import QualityAgent
 from app.agents.performance_agent import PerformanceAgent

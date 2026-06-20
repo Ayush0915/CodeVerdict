@@ -2,7 +2,7 @@ import re
 import os
 import json
 import logging
-from typing import Dict, List, Any, Tuple
+from typing import Dict, Any, Tuple
 from pathlib import Path
 import httpx
 from app import config
