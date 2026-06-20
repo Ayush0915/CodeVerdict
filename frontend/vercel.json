@@ -7,8 +7,5 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "env": {
-    "VITE_API_URL": "@codesentry_api_url"
-  }
+  ]
 }
