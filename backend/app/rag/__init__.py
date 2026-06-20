@@ -1,1 +1,1 @@
-# CodeSentry RAG package
+# CodeVerdict RAG package

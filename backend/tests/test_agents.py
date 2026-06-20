@@ -9,7 +9,7 @@ from app.agents.synthesizer_agent import SynthesizerAgent
 from app.orchestrator import orchestrator
 from app.models.schemas import Finding
 
-class TestCodeSentryAgents(unittest.TestCase):
+class TestCodeVerdictAgents(unittest.TestCase):
     def setUp(self):
         # Sample PR details for tests
         self.mock_pr = {

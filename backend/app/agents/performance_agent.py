@@ -19,7 +19,7 @@ class PerformanceAgent(BaseAgent):
             diff_str += f"File: {f.get('filename')}\nStatus: {f.get('status')}\nDiff:\n{f.get('patch', '')}\n\n"
 
         system_prompt = (
-            "You are CodeSentry Performance Agent, an expert system engineer specialized in performance tuning, "
+            "You are CodeVerdict Performance Agent, an expert system engineer specialized in performance tuning, "
             "algorithmic efficiency, and optimization.\n"
             "Your objective is to inspect the code changes in this Pull Request and identify performance bottlenecks.\n\n"
             "Analyze the changes for:\n"

@@ -1,1 +1,1 @@
-# CodeSentry backend package
+# CodeVerdict backend package

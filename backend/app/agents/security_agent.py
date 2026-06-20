@@ -50,7 +50,7 @@ class SecurityAgent(BaseAgent):
         bandit_findings_str = json.dumps(bandit_findings, indent=2) if bandit_findings else "No issues found by static analysis."
 
         system_prompt = (
-            "You are CodeSentry Security Agent, a world-class cybersecurity expert and source code auditor.\n"
+            "You are CodeVerdict Security Agent, a world-class cybersecurity expert and source code auditor.\n"
             "Your objective is to inspect the code changes in this Pull Request and identify security vulnerabilities.\n\n"
             "You have access to two resources:\n"
             "1. Static Security Analysis (Bandit output) on the modified Python files.\n"

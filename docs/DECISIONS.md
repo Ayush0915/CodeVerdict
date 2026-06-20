@@ -1,11 +1,11 @@
-# CodeSentry Architectural Decisions Log
+# CodeVerdict Architectural Decisions Log
 
-This document lists the design and implementation decisions made during the building of CodeSentry, including their rationale.
+This document lists the design and implementation decisions made during the building of CodeVerdict, including their rationale.
 
 ---
 
 ### Decision 1: Direct HTTP Calls for Groq and GitHub APIs
-- **Description:** Instead of importing specialized libraries (e.g. `groq` or `PyGithub`), CodeSentry uses standard asynchronous HTTP requests via `httpx` to query GitHub and Groq.
+- **Description:** Instead of importing specialized libraries (e.g. `groq` or `PyGithub`), CodeVerdict uses standard asynchronous HTTP requests via `httpx` to query GitHub and Groq.
 - **Rationale:**
   - Standardizes error handling and timeouts across external network calls.
   - Keeps the codebase extremely lightweight and reduces package dependency bloat.
@@ -44,3 +44,37 @@ This document lists the design and implementation decisions made during the buil
   - Standard CSS rules are extremely easy to study, maintain, and require zero compile-time configuration.
   - Allows highly tailored glassmorphism styling, clean animations, and responsive layouts that look unique and premium.
   - Avoids dependencies on Tailwind CSS compilers or CSS-in-JS runtimes, optimizing loading speed.
+
+---
+
+### Decision 6: Project Rebrand to CodeVerdict
+- **Description:** Renamed all project occurrences from 'CodeSentry' to 'CodeVerdict' to avoid branding collisions in the AI code review space.
+- **Rationale:** Ensures clean branding and avoids confusion with existing products.
+- **Renamed Files Log:**
+  - `project.md`
+  - `README.md`
+  - `upgrade.md`
+  - `backend/app/main.py`
+  - `backend/app/__init__.py`
+  - `backend/app/agents/performance_agent.py`
+  - `backend/app/agents/quality_agent.py`
+  - `backend/app/agents/security_agent.py`
+  - `backend/app/agents/synthesizer_agent.py`
+  - `backend/app/agents/test_coverage_agent.py`
+  - `backend/app/agents/__init__.py`
+  - `backend/app/llm/groq_client.py`
+  - `backend/app/llm/__init__.py`
+  - `backend/app/models/__init__.py`
+  - `backend/app/rag/__init__.py`
+  - `backend/app/tools/bandit_runner.py`
+  - `backend/app/tools/__init__.py`
+  - `backend/eval/eval_results.md`
+  - `backend/eval/run_eval.py`
+  - `backend/tests/test_agents.py`
+  - `docs/ARCHITECTURE.md`
+  - `docs/DECISIONS.md`
+  - `docs/EVAL_METHODOLOGY.md`
+  - `docs/LEARNING_NOTES.md`
+  - `docs/RUN_GUIDE.md`
+  - `frontend/index.html`
+  - `frontend/src/App.jsx`

@@ -18,10 +18,10 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
-logger = logging.getLogger("codesentry")
+logger = logging.getLogger("codeverdict")
 
 app = FastAPI(
-    title="CodeSentry API",
+    title="CodeVerdict API",
     description="Multi-Agent Code Review System backend API",
     version="1.0.0"
 )
@@ -37,7 +37,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("Initializing CodeSentry RAG Vector Store...")
+    logger.info("Initializing CodeVerdict RAG Vector Store...")
     try:
         # Load index, or build it from knowledge base documents if it does not exist
         if not vector_store.load_index():
@@ -51,7 +51,7 @@ async def startup_event():
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy", "service": "codesentry-backend"}
+    return {"status": "healthy", "service": "codeverdict-backend"}
 
 @app.post("/review", response_model=SynthesisResult)
 async def review_pull_request(request: PRReviewRequest):

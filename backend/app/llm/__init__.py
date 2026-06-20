@@ -1,1 +1,1 @@
-# CodeSentry LLM package
+# CodeVerdict LLM package

@@ -33,7 +33,7 @@ export default function App() {
         <div className="header-content">
           <div className="logo-group">
             <span className="logo-icon">🛡️</span>
-            <h1>CodeSentry</h1>
+            <h1>CodeVerdict</h1>
           </div>
           <p>Multi-Agent Code Review & Security Gate</p>
         </div>
@@ -66,7 +66,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="app-footer">
-        <p>© 2026 CodeSentry. Built for Technical Review Portfolio.</p>
+        <p>© 2026 CodeVerdict. Built for Technical Review Portfolio.</p>
       </footer>
     </div>
   );

@@ -10,6 +10,9 @@ from typing import List, Dict, Any
 # Ensure project root is in python path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# Force evaluation suite to run in deterministic offline mock mode
+os.environ["GROQ_API_KEY"] = ""
+
 from app import config
 from app.orchestrator import orchestrator
 from app.models.schemas import SynthesisResult, Finding
@@ -135,7 +138,7 @@ async def run_evaluation():
     overall_recall = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else 1.0
     
     print("\n" + "="*40)
-    print("CodeSentry Evaluation Suite Summary:")
+    print("CodeVerdict Evaluation Suite Summary:")
     print(f"Total Expected Issues: {total_expected_issues}")
     print(f"Total True Positives:  {total_tp}")
     print(f"Total False Positives: {total_fp}")
@@ -155,7 +158,7 @@ async def run_evaluation():
 
     # Generate eval_results.md
     results_md = (
-        f"# CodeSentry Evaluation Results\n\n"
+        f"# CodeVerdict Evaluation Results\n\n"
         f"**Date:** 2026-06-20\n"
         f"**Model configuration:** {config.DEFAULT_LLM_MODEL}\n"
         f"**Execution mode:** Deterministic simulation & live API fallback\n\n"

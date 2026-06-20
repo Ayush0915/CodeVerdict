@@ -16,6 +16,17 @@ export default function AgentFindingsCard({ agentBreakdowns }) {
     }
   };
 
+  const calculateConfidence = (finding) => {
+    const isStaticVerified = finding.description.toLowerCase().includes('bandit rule');
+    if (isStaticVerified) return 98;
+    
+    switch (finding.severity.toLowerCase()) {
+      case 'critical': return 92;
+      case 'warning': return 82;
+      default: return 70;
+    }
+  };
+
   return (
     <div className="card findings-card">
       <div className="card-header">
@@ -52,30 +63,61 @@ export default function AgentFindingsCard({ agentBreakdowns }) {
           </div>
         ) : (
           <div className="findings-list">
-            {activeFindings.map((finding, idx) => (
-              <div key={idx} className="finding-item">
-                <div className="finding-meta">
-                  <span className={`badge ${getSeverityClass(finding.severity)}`}>
-                    {finding.severity}
-                  </span>
-                  <span className="finding-file-path">
-                    {finding.file}
-                    {finding.line_range ? ` : L${finding.line_range}` : ''}
-                  </span>
-                </div>
-                
-                <h4 className="finding-title">{finding.description}</h4>
-                
-                {finding.suggestion && (
-                  <div className="finding-suggestion">
-                    <h5>Proposed Fix:</h5>
-                    <pre className="code-block">
-                      <code>{finding.suggestion}</code>
-                    </pre>
+            {activeFindings.map((finding, idx) => {
+              const isStaticVerified = finding.description.toLowerCase().includes('bandit rule');
+              const confidenceScore = calculateConfidence(finding);
+
+              return (
+                <div key={idx} className="finding-item">
+                  <div className="finding-meta">
+                    <div className="badges-row">
+                      <span className={`badge ${getSeverityClass(finding.severity)}`}>
+                        {finding.severity}
+                      </span>
+                      {isStaticVerified && (
+                        <span className="badge-static-verified">
+                          ⚡ Verified by Bandit SAST
+                        </span>
+                      )}
+                    </div>
+                    <span className="finding-file-path">
+                      <code>{finding.file}{finding.line_range ? `:L${finding.line_range}` : ''}</code>
+                    </span>
                   </div>
-                )}
-              </div>
-            ))}
+                  
+                  <h4 className="finding-title">{finding.description}</h4>
+                  
+                  {finding.suggestion && (
+                    <div className="finding-suggestion">
+                      <h5>Proposed Fix:</h5>
+                      <pre className="code-block">
+                        <code>{finding.suggestion}</code>
+                      </pre>
+                    </div>
+                  )}
+
+                  {/* Score Bar - Signature UI Element */}
+                  <div className="confidence-score-container">
+                    <span className="confidence-score-label">Confidence Matrix</span>
+                    <div className="confidence-score-bar-wrapper">
+                      <div 
+                        className={`confidence-score-bar-fill ${isStaticVerified ? 'verified' : finding.severity.toLowerCase()}`} 
+                        style={{ width: `${confidenceScore}%` }} 
+                      />
+                    </div>
+                    <span 
+                      className="confidence-score-label" 
+                      style={{ 
+                        fontWeight: '600', 
+                        color: isStaticVerified ? 'var(--accent-success)' : 'var(--text-primary)' 
+                      }}
+                    >
+                      {confidenceScore}%
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

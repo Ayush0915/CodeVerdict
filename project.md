@@ -1,6 +1,6 @@
-# CodeSentry — Full Build Specification
+# CodeVerdict — Full Build Specification
 
-**Project:** CodeSentry (Multi-Agent Code Review System)
+**Project:** CodeVerdict (Multi-Agent Code Review System)
 **Builder:** Antigravity agentic IDE
 **Execution mode:** All phases, single autonomous pass
 **Owner:** Ayush Kumar Bhadani (final-year B.Tech CSE - Data Science)
@@ -9,7 +9,7 @@
 
 ## 0. READ THIS FIRST — Instructions to the Copilot
 
-You are building **CodeSentry**, a multi-agent AI code review tool, for a student who needs to:
+You are building **CodeVerdict**, a multi-agent AI code review tool, for a student who needs to:
 1. Have a fully working, demoable application at the end of this build.
 2. **Be able to explain every architectural decision in a technical interview.** This means you must produce real learning documentation as you build — not just code comments, but standalone markdown docs that explain *why* each component exists and *how* it works, written so a human who did not write the code can study them afterward.
 3. Have a genuine evaluation (precision/recall) showing the tool actually works — not a demo that only works on cherry-picked examples.
@@ -30,7 +30,7 @@ If anything in this spec is ambiguous or you must make an assumption, **write th
 
 ## 1. Project Overview
 
-**Problem statement:** Code review is inconsistent and slow. A single reviewer (human or AI) tends to focus on whichever concern they're best at (style, security, performance) and miss the others. CodeSentry runs a GitHub Pull Request through four specialized AI agents — each focused on one concern — then merges their findings into a single, prioritized, de-duplicated review.
+**Problem statement:** Code review is inconsistent and slow. A single reviewer (human or AI) tends to focus on whichever concern they're best at (style, security, performance) and miss the others. CodeVerdict runs a GitHub Pull Request through four specialized AI agents — each focused on one concern — then merges their findings into a single, prioritized, de-duplicated review.
 
 **What makes this "agentic" rather than "a script that calls an LLM":**
 - Multiple agents with distinct roles and distinct context/tools, not one generic prompt.
@@ -103,7 +103,7 @@ If anything in this spec is ambiguous or you must make an assumption, **write th
 Create exactly this structure:
 
 ```
-codesentry/
+codeverdict/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py                  # FastAPI app entrypoint
@@ -205,10 +205,10 @@ Build in this order. Even though this is a single autonomous pass, internally se
 
 ### Phase 5 — Evaluation Suite
 24. Curate `eval/dataset/`: 10–15 real or seeded PRs with **documented, known issues** (a mix of security, quality, performance, missing-test problems). Document the source and rationale for each in `docs/EVAL_METHODOLOGY.md`.
-25. Implement `run_eval.py`: runs CodeSentry against each PR in the dataset, compares flagged issues against the known/expected issues, computes:
+25. Implement `run_eval.py`: runs CodeVerdict against each PR in the dataset, compares flagged issues against the known/expected issues, computes:
     - Precision (% of flagged issues that are real/expected)
     - Recall (% of known issues that were caught)
-    - At least one documented failure mode (a case where CodeSentry missed something or produced a false positive) — record this explicitly, do not hide it.
+    - At least one documented failure mode (a case where CodeVerdict missed something or produced a false positive) — record this explicitly, do not hide it.
 26. Write results to `eval/eval_results.md` in a clear table format.
 
 ### Phase 6 — Dockerization
@@ -250,7 +250,7 @@ For each agent, implement a consistent interface (`base_agent.py`) so the orches
 This file is for the project owner to study from afterward — it must read like clear teaching material, not code comments. Structure it with one section per concept below. Each section should explain: **what the concept is, why it was needed in this specific project (not generically), and how it was implemented here**, in plain language a final-year CS student can re-explain in an interview without re-reading the code.
 
 Required sections:
-1. **Agentic AI vs. simple LLM calls** — what makes this project "agentic," using CodeSentry's own orchestrator/synthesizer as the example.
+1. **Agentic AI vs. simple LLM calls** — what makes this project "agentic," using CodeVerdict's own orchestrator/synthesizer as the example.
 2. **Async orchestration** — why `asyncio.gather` was used, what would break/slow down without it.
 3. **RAG fundamentals** — embeddings, chunking, similarity search; why FAISS was chosen; why RAG specifically helps the Quality and Security agents rather than being a generic add-on.
 4. **Tool use (bandit integration)** — why an LLM alone is insufficient for security analysis, what bandit actually checks for, how its output is merged with LLM reasoning.

@@ -118,7 +118,7 @@ class GroqClient:
             critical_count = sum(1 for f in findings if f.get("severity") == "Critical")
             warning_count = sum(1 for f in findings if f.get("severity") == "Warning")
             
-            summary = f"CodeSentry review complete. Found {critical_count} critical issues and {warning_count} warnings. "
+            summary = f"CodeVerdict review complete. Found {critical_count} critical issues and {warning_count} warnings. "
             if critical_count > 0:
                 summary += "Security risks are present in user-input command execution and database connection details. Fix immediately."
             else:

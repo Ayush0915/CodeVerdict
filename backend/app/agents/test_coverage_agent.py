@@ -19,7 +19,7 @@ class TestCoverageAgent(BaseAgent):
             diff_str += f"File: {f.get('filename')}\nStatus: {f.get('status')}\nDiff:\n{f.get('patch', '')}\n\n"
 
         system_prompt = (
-            "You are CodeSentry Test Coverage Agent, a QA engineer and unit-testing expert.\n"
+            "You are CodeVerdict Test Coverage Agent, a QA engineer and unit-testing expert.\n"
             "Your objective is to inspect the code changes in this Pull Request and assess testing status.\n\n"
             "Analyze the changes for:\n"
             "- New business logic (functions, routes, classes, conditions) introduced without accompanying unit or integration tests.\n"

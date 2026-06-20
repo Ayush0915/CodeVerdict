@@ -35,7 +35,7 @@ class QualityAgent(BaseAgent):
             diff_str += f"File: {f.get('filename')}\nStatus: {f.get('status')}\nDiff:\n{f.get('patch', '')}\n\n"
 
         system_prompt = (
-            "You are CodeSentry Quality Agent, an expert software engineer and code quality reviewer.\n"
+            "You are CodeVerdict Quality Agent, an expert software engineer and code quality reviewer.\n"
             "Your objective is to inspect the code changes in this Pull Request and identify quality issues, "
             "style violations, architectural concerns, and coding standard deviations.\n\n"
             "Evaluate the changes for:\n"

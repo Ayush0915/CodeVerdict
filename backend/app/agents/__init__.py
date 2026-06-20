@@ -1,1 +1,1 @@
-# CodeSentry agents package
+# CodeVerdict agents package

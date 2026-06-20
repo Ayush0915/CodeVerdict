@@ -24,7 +24,7 @@ class BanditRunner:
             return []
 
         # Create temporary directory
-        temp_dir = tempfile.mkdtemp(prefix="codesentry_bandit_")
+        temp_dir = tempfile.mkdtemp(prefix="codeverdict_bandit_")
         temp_path = Path(temp_dir)
         
         try:

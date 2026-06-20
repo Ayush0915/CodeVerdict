@@ -1,4 +1,4 @@
-# CodeSentry Evaluation Results
+# CodeVerdict Evaluation Results
 
 **Date:** 2026-06-20
 **Model configuration:** llama-3.3-70b-versatile

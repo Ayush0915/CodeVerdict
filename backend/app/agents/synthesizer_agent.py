@@ -35,13 +35,13 @@ class SynthesizerAgent(BaseAgent):
         if not all_findings_raw:
             return SynthesisResult(
                 pr_url=pr_url,
-                summary="CodeSentry reviewed the pull request. No issues were found! Code looks clean and ready.",
+                summary="CodeVerdict reviewed the pull request. No issues were found! Code looks clean and ready.",
                 findings=[],
                 agent_breakdowns={name: findings for name, findings in agent_results.items()}
             )
 
         system_prompt = (
-            "You are CodeSentry Synthesizer Agent, a lead software architect. "
+            "You are CodeVerdict Synthesizer Agent, a lead software architect. "
             "Your role is to compile and refine code review findings from multiple specialized agents (Security, Quality, Performance, Coverage).\n\n"
             "Your tasks:\n"
             "1. Read the list of raw findings from all agents.\n"
@@ -99,7 +99,7 @@ class SynthesizerAgent(BaseAgent):
                 except Exception as e:
                     logger.warning(f"Failed to parse synthesized finding: {e}")
 
-            summary = parsed.get("summary", "Review completed by CodeSentry.")
+            summary = parsed.get("summary", "Review completed by CodeVerdict.")
             
             return SynthesisResult(
                 pr_url=pr_url,
@@ -143,7 +143,7 @@ class SynthesizerAgent(BaseAgent):
         deduplicated.sort(key=lambda x: severity_order.get(x.severity, 3))
         
         summary = (
-            f"CodeSentry complete. We analyzed the pull request and identified "
+            f"CodeVerdict complete. We analyzed the pull request and identified "
             f"{critical_count} critical issues, {warning_count} warnings, and {suggestion_count} suggestions. "
             "Please review the detailed findings below categorized by agent."
         )

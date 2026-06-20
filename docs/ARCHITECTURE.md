@@ -1,6 +1,6 @@
-# CodeSentry Architectural Design
+# CodeVerdict Architectural Design
 
-This document details the system architecture of CodeSentry, explaining the workflow from pull request input to the final synthesized review.
+This document details the system architecture of CodeVerdict, explaining the workflow from pull request input to the final synthesized review.
 
 ---
 

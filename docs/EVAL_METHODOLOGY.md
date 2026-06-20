@@ -1,23 +1,23 @@
-# CodeSentry Evaluation Methodology
+# CodeVerdict Evaluation Methodology
 
-This document outlines the design, metrics, and composition of CodeSentry's evaluation suite.
+This document outlines the design, metrics, and composition of CodeVerdict's evaluation suite.
 
 ---
 
 ## 1. Metric Definitions
 
-CodeSentry uses standard evaluation metrics to gauge review performance:
+CodeVerdict uses standard evaluation metrics to gauge review performance:
 
 ### 1.1 True Positive (TP)
 An expected issue defined in the dataset that was correctly flagged by the system.
 - **Match Criteria:** The flagged finding matches the expected category, and its description matches the expected issue's regex pattern.
 
 ### 1.2 False Positive (FP)
-A finding flagged by CodeSentry that does not correspond to any expected issue in the dataset.
+A finding flagged by CodeVerdict that does not correspond to any expected issue in the dataset.
 - *Note:* In code review systems, some FPs are useful feedback, but for testing correctness, we aim to minimize them to reduce "noise" for developers.
 
 ### 1.3 False Negative (FN)
-An expected issue that CodeSentry failed to identify in the review output.
+An expected issue that CodeVerdict failed to identify in the review output.
 
 ### 1.4 Precision
 The percentage of flagged issues that are correct:

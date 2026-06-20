@@ -1,6 +1,6 @@
-# CodeSentry — Multi-Agent AI Code Review System
+# CodeVerdict — Multi-Agent AI Code Review System
 
-CodeSentry is a secure-by-default, multi-agent AI code review system designed to evaluate Pull Requests (PRs). Rather than routing code analysis through a single general prompt (which suffers from attention dilution), CodeSentry runs PR diffs through four specialized agents operating in parallel, then compiles and structures their findings into a single, ranked report using a technical synthesizer.
+CodeVerdict is a secure-by-default, multi-agent AI code review system designed to evaluate Pull Requests (PRs). Rather than routing code analysis through a single general prompt (which suffers from attention dilution), CodeVerdict runs PR diffs through four specialized agents operating in parallel, then compiles and structures their findings into a single, ranked report using a technical synthesizer.
 
 ---
 
@@ -29,7 +29,7 @@ CodeSentry is a secure-by-default, multi-agent AI code review system designed to
 ## 📂 Project Structure
 
 ```
-codesentry/
+codeverdict/
 ├── backend/
 │   ├── app/
 │   │   ├── agents/          # Specialist agents (Security, Quality, Performance, Coverage, Synthesizer)
@@ -56,7 +56,7 @@ codesentry/
 ## ⚡ Quick Start (Pre-Configured Environment)
 
 If you are using this pre-packaged workspace, all dependencies and virtual environments are already set up. Simply refer to the step-by-step guide:
-👉 **[Step-by-Step Running Guide](file:///D:/project/codesentry/docs/RUN_GUIDE.md)**
+👉 **[Step-by-Step Running Guide](file:///D:/project/codeverdict/docs/RUN_GUIDE.md)**
 
 ---
 
@@ -129,7 +129,7 @@ To calculate Precision and Recall metrics against the local evaluation dataset:
    ```bash
    python eval/run_eval.py
    ```
-3. The script outputs detailed findings and creates a markdown results sheet at **[eval/eval_results.md](file:///D:/project/codesentry/backend/eval/eval_results.md)**.
+3. The script outputs detailed findings and creates a markdown results sheet at **[eval/eval_results.md](file:///D:/project/codeverdict/backend/eval/eval_results.md)**.
 4. Note: If `GROQ_API_KEY` is not present, the evaluation suite automatically activates the deterministic mock completions engine, running completely offline to gate CI/CD testing.
 
 ---
@@ -146,7 +146,7 @@ python -m unittest discover -s backend/tests -p "test_*.py"
 ## 📚 Study and Learning Documents
 
 If you are preparing for technical reviews or system architecture interviews, review the generated files inside `docs/`:
-- **[LEARNING_NOTES.md](file:///D:/project/codesentry/docs/LEARNING_NOTES.md):** Detailed explanations covering Agentic AI, Asynchronous Orchestration, RAG concepts, Tool Use, Evaluation Metrics, and DevOps structures.
-- **[DECISIONS.md](file:///D:/project/codesentry/docs/DECISIONS.md):** Log of architectural decisions and engineering trade-offs.
-- **[ARCHITECTURE.md](file:///D:/project/codesentry/docs/ARCHITECTURE.md):** Deep-dive into technical workflows and component interactions.
-- **[EVAL_METHODOLOGY.md](file:///D:/project/codesentry/docs/EVAL_METHODOLOGY.md):** Details on expected bugs and statistical calculation formulas.
+- **[LEARNING_NOTES.md](file:///D:/project/codeverdict/docs/LEARNING_NOTES.md):** Detailed explanations covering Agentic AI, Asynchronous Orchestration, RAG concepts, Tool Use, Evaluation Metrics, and DevOps structures.
+- **[DECISIONS.md](file:///D:/project/codeverdict/docs/DECISIONS.md):** Log of architectural decisions and engineering trade-offs.
+- **[ARCHITECTURE.md](file:///D:/project/codeverdict/docs/ARCHITECTURE.md):** Deep-dive into technical workflows and component interactions.
+- **[EVAL_METHODOLOGY.md](file:///D:/project/codeverdict/docs/EVAL_METHODOLOGY.md):** Details on expected bugs and statistical calculation formulas.

@@ -1,1 +1,1 @@
-# CodeSentry tools package
+# CodeVerdict tools package

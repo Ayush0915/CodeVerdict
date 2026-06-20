@@ -1,1 +1,1 @@
-# CodeSentry models package
+# CodeVerdict models package
